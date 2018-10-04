@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 
 numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+parenthesis = ['(', ')'] 
 allow = False
 
 # the main programm :
@@ -77,7 +78,7 @@ def main():
     bs.config(command=lambda: backspace(entry))
 
 
-# Pack :
+# Grid :
     b0.grid(row=5, column=0, sticky='nsew')
     b1.grid(row=4, column=0, sticky='nsew')
     b2.grid(row=4, column=1, sticky='nsew')
@@ -111,38 +112,47 @@ def main():
 def b_click(e, n):
     global allow
     e.state(['!readonly'])
+    
     if (n in numbers):
-        allow = True
-    else:
-        allow = False
-    if (allow):
         e.insert(tk.END, n)
+        allow = True
+    elif(n == parenthesis[0]):
+        if (not allow):
+           e.insert(tk.END, n)
+    elif(n == parenthesis[1]):
+        if (allow):
+           e.insert(tk.END, n)
+    else:
+        if (allow):
+            e.insert(tk.END, n)
+            allow = False
+    
     e.state(['readonly'])
 
 # clear command
-
-
 def clear(e):
+    global allow
     e.state(['!readonly'])
     e.delete(0, tk.END)
+    allow = False
     e.state(['readonly'])
 
 # backspace command
-
-
 def backspace(e):
+    global allow
     e.state(['!readonly'])
     e.delete(len(e.get())-1)
+    allow = False
     e.state(['readonly'])
 
 # equal command
-
-
 def equal(e):
+    global allow
     e.state(['!readonly'])
     res = eval(e.get())
     e.delete(0, tk.END)
     e.insert(0, res)
+    allow = True
     e.state(['readonly'])
 
 
