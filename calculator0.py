@@ -1,29 +1,30 @@
 import tkinter as tk
 from tkinter import ttk
 
+# the main programm :
 def main():
 	
 	root = tk.Tk()
 	# entry
 	entry = ttk.Entry(root, width = 300, font = ('', 18, ''), justify = 'right')
-	# buttons
+	
+  # TODO find better way to create buttons
+
+# Create :
+  # numbers :
 	b1 = ttk.Button(root, text = '1', width = 5)
 	b2 = ttk.Button(root, text = '2', width = 5)
 	b3 = ttk.Button(root, text = '3', width = 5)
-	plus = ttk.Button(root, text = '+', width = 5)
+
+  # operations :
+	bplus = ttk.Button(root, text = '+', width = 5)
 	equ = ttk.Button(root, text = '=', width = 5)
+
+  # clear :
 	clr = ttk.Button(root, text = 'clr', width = 5)
 	bs = ttk.Button(root, text = "<-", width = 5)
 
-	# TODO find better way to create buttons
-	# for i in range(10) :
-	# 	# number = ttk.Button(root, text = str(i), width = 5)
-	# 	numbers.append(ttk.Button(root, text = str(i), width = 5))
-	# 	print(len(numbers))
-	# 	numbers[i].pack()
-	# 	numbers[i].config(command = lambda : click(entry, str(i)))
-
-
+# Configure :
 
 	# set width = 300, height = 500
 	root.geometry("300x500")
@@ -32,44 +33,57 @@ def main():
 	entry.pack()
 	entry.state(['readonly'])
 
-	b1.config(command = lambda : click(entry, '1'))
-	b2.config(command = lambda : click(entry, '2'))
-	b3.config(command = lambda : click(entry, '3'))
-	plus.config(command = lambda : click(entry, '3'))
+  # buttons :
+	b1.config(command = lambda : b_click(entry, '1'))
+	b2.config(command = lambda : b_click(entry, '2'))
+	b3.config(command = lambda : b_click(entry, '3'))
+	bplus.config(command = lambda : b_click(entry, '+'))
 	clr.config(command = lambda : clear(entry))
+	bs.config(command = lambda : backspace(entry))
+	equ.config(command = lambda : equal(entry))
 
 
+# Pack :
 	b1.pack()
 	b2.pack()
 	b3.pack()
-	plus.pack()
+	bplus.pack()
 	equ.pack()
 	clr.pack()
 	bs.pack()
 
-
 	# infinte loop
 	root.mainloop()
 
-# def readonlyDecorator(f) :
-# 	def wrapper(*args, **kwargs) :
-# 		args[0].state(['!readonly'])
-# 		f(iter(list(args)))
-# 		args[0].state(['readonly'])
-# 	return wrapper
 
+# TODO minimize repetitive code using Decorators
 
-# @readonlyDecorator
-def click(e, n):
-	e.insert(tk.END, n)
+# buttons click command
+def b_click(e, n):
+  e.state(['!readonly'])
+  e.insert(tk.END, n)
+  e.state(['readonly'])
 
-
-# @readonlyDecorator
+# clear command
 def clear(e):
-	e.delete(0, tk.END)
+  e.state(['!readonly'])
+  e.delete(0, tk.END)
+  e.state(['readonly'])
+
+# backspace command
+def backspace(e):
+  e.state(['!readonly'])
+  e.delete(len(e.get())-1)
+  e.state(['readonly'])
+
+# equal command
+def equal(e):
+  e.state(['!readonly'])
+  res = eval(e.get())
+  e.delete(0, tk.END)
+  e.insert(0, res)
+  e.state(['readonly'])
+
+
 
 if __name__ == "__main__" : main()
-
-
-
-
